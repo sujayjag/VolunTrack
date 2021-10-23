@@ -11,6 +11,7 @@ const App = () => {
     <NavigationContainer>
       <MainStackNavigator/>
     </NavigationContainer>
+    //test
   );
 }
 
