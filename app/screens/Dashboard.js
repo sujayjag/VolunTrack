@@ -5,6 +5,7 @@ import { StyleSheet, Text, View, SafeAreaView, Platform, ImageBackground, Image,
 const Dashboard = ({ navigation }) => {
     return (
         <View style={styles.cont}>
+            <StatusBar style="auto"/>
             <TouchableOpacity style={styles.profileIcon2} onPress={() => navigation.navigate("Profile")}>
                 <Image style = {styles.logo} source={require("../assets/user.png")}></Image> 
             </TouchableOpacity>
@@ -17,11 +18,11 @@ const Dashboard = ({ navigation }) => {
             </TouchableOpacity>
 
             <View style={styles.container}>
-                <TouchableOpacity style={styles.pastButton} onPress={() => navigation.navigate("Home")}>
+                <TouchableOpacity style={styles.pastButton} onPress={() => navigation.navigate("pastEvents")}>
                     <Text style={styles.pastText}>Past Events</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.currentButton} onPress={() => navigation.navigate("Home")}>
-                    <Text style={styles.currentText}>Current Event</Text>
+                <TouchableOpacity style={styles.currentButton} onPress={() => navigation.navigate("currentEvents")}>
+                    <Text style={styles.currentText}>Current Events</Text>
                 </TouchableOpacity>
             </View>
         </View>

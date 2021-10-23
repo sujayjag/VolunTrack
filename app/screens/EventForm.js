@@ -85,8 +85,8 @@ const EventForm = ({ navigation }) => {
                     />
                 </View>
      
-                <TouchableOpacity style={styles.signOutButton} onPress={() => navigation.navigate("Login")}>
-                    <Text style={styles.signOutText}>Sign out</Text>
+                <TouchableOpacity style={styles.signOutButton} onPress={() => navigation.navigate("Dashboard")}>
+                    <Text style={styles.signOutText}>Start Event</Text>
                 </TouchableOpacity>
             </View>
         </View>
