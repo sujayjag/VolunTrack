@@ -3,7 +3,7 @@ import React, { useState, useRef, Component } from "react";
 import { StyleSheet, Text, View, SafeAreaView, Platform, ImageBackground, Image, Button, Pressable, TextInput, TouchableOpacity} from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
-import { doc, setDoc, addDoc, collection, getFirestore, onSnapshot } from "firebase/firestore";
+import { doc, setDoc, addDoc, getDoc, collection, getFirestore, onSnapshot } from "firebase/firestore";
 import { initializeApp, firebase} from 'firebase/app';
 
 const firebaseApp = initializeApp({
@@ -80,7 +80,7 @@ const firebaseApp = initializeApp({
             //userRef.set(data);
 
             const firestore = getFirestore();
-            const userRef = doc(firestore, 'User/M2zB52PGYyjHOiA3lfjB');
+            const userRef = collection(firestore, 'User');
             function writeUserRef() {
                 const docData = {
                     email: email,
@@ -88,7 +88,7 @@ const firebaseApp = initializeApp({
                     lName: lname,
                     phoneNum: phone
                 };
-                setDoc(userRef, docData)
+                addDoc(userRef, docData)
                     .then(() => {
                         console.log('This value has been written to the database!');
                     })
@@ -118,7 +118,7 @@ const firebaseApp = initializeApp({
 
             function listenToADocument() {
                 onSnapshot(userRef, (docSnapshot) => {
-                    if (docSnapshot.exists()) {
+                    if (docSnapshot !== null) {
                         const docData = docSnapshot.data();
                         console.log(`In realtime, docData is ${JSON.stringify(docData)}`);
                     }
@@ -127,8 +127,8 @@ const firebaseApp = initializeApp({
 
             writeUserRef();
             addANewDocument();
-            readASingleDocument();
-            listenToADocument();
+            // readASingleDocument();
+            // listenToADocument();
 
             const user = userCredential.user;
             navigation.navigate("Dashboard");
