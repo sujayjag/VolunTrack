@@ -3,7 +3,7 @@ import React, { useState, useRef, Component } from "react";
 import { StyleSheet, Text, View, SafeAreaView, Platform, ImageBackground, Image, Button, Pressable, TextInput, TouchableOpacity} from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
-import { doc, setDoc, addDoc, getDoc, collection, getFirestore, onSnapshot } from "firebase/firestore";
+import { getDatabase, ref, set  } from "firebase/database";
 import { initializeApp, firebase} from 'firebase/app';
 
 const firebaseApp = initializeApp({
@@ -15,6 +15,36 @@ const firebaseApp = initializeApp({
   appId: "1:237292785966:web:8813a69013f743a1afaabf",
   measurementId: "G-KN9SKC5DYZ"
 });
+
+
+const saveUserData = (first, last, emailAddress, phoneNumber) => {
+  const db = getDatabase();
+  set(ref(db, "/users/" + phoneNumber), {
+    
+  
+      "type": "user",
+      "email": emailAddress,
+      "fName": first,
+      "lName": last,
+      "phoneNum": phoneNumber,
+      "role": null,
+      "volunteeredEvents": {},
+      "createdEvents": {}
+  })
+/*{"id": "M2zB52PGYyjHOiA3lfjB",
+  "properties": {
+  
+  "type": "user",
+  "email": "john@gmail.com",
+  "fName": "john",
+  "lName": "duck",
+  "phoneNum": 1234567890,
+  "role": null,
+  "volunteeredEvents": {},
+  "createdEvents": {}
+
+}} */
+}
 
   const validateNumber = num => {
     num = num.replace(/\D/g,'');
@@ -57,80 +87,11 @@ const firebaseApp = initializeApp({
         setPhone(p);
 
         const auth = getAuth();
-        createUserWithEmailAndPassword(auth, email, password)
+        createUserWithEmailAndPassword(auth, e, pass)
           .then((userCredential) => {
-        // Signed in 
             
-            /*const db = getFirestore(firebaseApp)
-            addDoc(collection(db, "User"), {
-              email: email,
-              fName: fname,
-              lName: lname,
-              phoneNum: phone
-            })*/
-
-            //const firestore = getFirestore();
-            //const db = getFirestore(firebaseApp)
-            //const db = firebase.firestore()
-            //var userRef = db.collection(firestore, "User").doc();
-            //const query = db.doc(this.props.user.uid).collection('User').orderBy('uploadedOn', 'desc').limit(50)
-            //const userRef = doc(query, "User");
-            //setDoc(userRef, { email: email }, { fName: fname }, { lName: lname }, { phoneNum: phone });
-            //data = {email: email, fName: fname ,  lName: lname ,  phoneNum: phone };
-            //userRef.set(data);
-
-            const firestore = getFirestore();
-            const userRef = collection(firestore, 'User');
-            function writeUserRef() {
-                const docData = {
-                    email: email,
-                    fName: fname,
-                    lName: lname,
-                    phoneNum: phone
-                };
-                addDoc(userRef, docData)
-                    .then(() => {
-                        console.log('This value has been written to the database!');
-                    })
-                    .catch((error) => {
-                        console.log(`I got an error! ${error}`);
-                    });
-            }
-
-            const userCollection = collection(firestore, 'User');
-            async function addANewDocument() {
-                const newDoc = await addDoc(userCollection, {
-                    email: email,
-                    fName: fname,
-                    lName: lname,
-                    phoneNum: phone
-                });
-                console.log(`Your doc was created at ${newDoc.path}`);
-            }
-
-            async function readASingleDocument() {
-                const mySnapshot = await getDoc(userRef);
-                if (mySnapshot.exists()) {
-                    const docData = mySnapshot.data();
-                    console.log(`My data is ${JSON.stringify(docData)}`);
-                }
-            }
-
-            function listenToADocument() {
-                onSnapshot(userRef, (docSnapshot) => {
-                    if (docSnapshot !== null) {
-                        const docData = docSnapshot.data();
-                        console.log(`In realtime, docData is ${JSON.stringify(docData)}`);
-                    }
-                });
-            }
-
-            writeUserRef();
-            addANewDocument();
-            // readASingleDocument();
-            // listenToADocument();
-
             const user = userCredential.user;
+            saveUserData(f, l, e, p)
             navigation.navigate("Dashboard");
         
             
