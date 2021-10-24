@@ -13,6 +13,7 @@ import createdEvents from "../app/screens/createdEvents.js";
 import joinedEvents from "../app/screens/joinedEvents.js";
 import currentEvents from "../app/screens/currentEvents.js";
 import Success from "../app/screens/Success.js";
+import QRCode from "../app/screens/QRCode.js";
 
 const Stack = createStackNavigator();
 
@@ -38,6 +39,7 @@ const MainStackNavigator = () => {
       <Stack.Screen name="joinedEvents" component={joinedEvents} options={{ title: 'Joined Events' }}/>
       <Stack.Screen name="currentEvents" component={currentEvents} options={{ title: 'Current Events' }}/>
       <Stack.Screen name="Success" component={Success} />
+      <Stack.Screen name="QRCode" component={QRCode} options={{ title: 'QR Code' }}/>
     </Stack.Navigator>
   );
 }
