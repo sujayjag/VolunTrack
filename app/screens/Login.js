@@ -2,10 +2,27 @@ import { StatusBar } from "expo-status-bar";
 import React, { useState } from "react";
 import { StyleSheet, Text, View, SafeAreaView, Platform, ImageBackground, Image, Button, Pressable, TextInput, TouchableOpacity} from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 
 const Login = ({ navigation }) => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const handleSignIn = () => {
+      const auth = getAuth();
+      signInWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+          // Signed in 
+          const user = userCredential.user;
+          navigation.navigate("Dashboard")
+          // ...
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          alert(errorMessage);
+         });
+    }
+
     return (
         <View style={styles.container}>
             <View style={styles.logoContainer}>
@@ -33,11 +50,11 @@ const Login = ({ navigation }) => {
                 />
             </View>
 
-            <TouchableOpacity style={styles.signUpButton} onPress={() => navigation.navigate("Dashboard")}>
-                    <LinearGradient
+            <TouchableOpacity style={styles.signUpButton} onPress={() => handleSignIn()} >
+                    <LinearGradient>
                         start={{x: 0, y: 0}} end={{x: 1, y: 0}}
                         colors={['#FBD786', '#f7797d']} style={styles.signUpButton} 
-                        onPress={() => navigation.navigate("Login")}>
+                        
                         <Text style={styles.signUpText}>Login</Text>
                     </LinearGradient>
             </TouchableOpacity>
