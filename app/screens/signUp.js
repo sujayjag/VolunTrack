@@ -1,6 +1,20 @@
 import { StatusBar } from "expo-status-bar";
 import React, { useState, useRef } from "react";
 import { StyleSheet, Text, View, SafeAreaView, Platform, ImageBackground, Image, Button, Pressable, TextInput, TouchableOpacity} from 'react-native';
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { doc, setDoc, addDoc, collection, getFirestore } from "firebase/firestore";
+import { initializeApp } from 'firebase/app';
+//import firebaseConfig from '../../db/firebaseConfig.js';
+
+const firebaseApp = initializeApp({
+  apiKey: "AIzaSyCtSa-qK2xb-Wky_vszWWACyTqru9c9l94",
+  authDomain: "voluntrack-ba589.firebaseapp.com",
+  projectId: "voluntrack-ba589",
+  storageBucket: "voluntrack-ba589.appspot.com",
+  messagingSenderId: "237292785966",
+  appId: "1:237292785966:web:8813a69013f743a1afaabf",
+  measurementId: "G-KN9SKC5DYZ"
+});
 
 const signUp = ({ navigation }) => {
     const [fname, setFname] = useState("");
@@ -9,6 +23,56 @@ const signUp = ({ navigation }) => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
+
+    const validateFields = (f, l, p, e, pass, c) => {
+      let phoneRe = /^(?:(?:\+?1\s*(?:[.-]\s*)?)?(?:\(\s*([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9])\s*\)|([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9]))\s*(?:[.-]\s*)?)?([2-9]1[02-9]|[2-9][02-9]1|[2-9][02-9]{2})\s*(?:[.-]\s*)?([0-9]{4})(?:\s*(?:#|x\.?|ext\.?|extension)\s*(\d+))?$/
+      let emailRe = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+      //fname, lname, phone, email, password, confirm password, in order.
+      if(!(f && l && p && e && pass && c)) {
+        alert(`Please fill out all fields`);
+        return;
+      }
+      else if(!phoneRe.test(p)){
+        alert('Please enter a valid phone number')
+      }
+      else if(!emailRe.test(String(e).toLowerCase())){
+        alert('Please enter a valid email')
+      }
+      else if(pass !== c) {
+        alert("Please make sure the passwords match")
+      }
+      //more validation logic here
+      
+      
+      else{
+        p = p.replace(/\D+/g, "");
+        setPhone(p);
+
+        const auth = getAuth();
+        createUserWithEmailAndPassword(auth, email, password)
+          .then((userCredential) => {
+        // Signed in 
+            
+            const db = getFirestore(firebaseApp)
+            addDoc(collection(db, "User"), {
+              email: email,
+              fName: fname,
+              lName: lname,
+              phoneNum: phone
+            })
+            const user = userCredential.user;
+        
+            navigation.navigate("Dashboard");
+          })
+          .catch((error) => {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            alert(errorMessage);
+          // ..
+          });
+        }
+    }
+
     return (
         <View style={styles.container}>
             <View style={styles.logoContainer}>
@@ -75,7 +139,7 @@ const signUp = ({ navigation }) => {
                     onChangeText={(confirmPassword) => setConfirmPassword(confirmPassword)}
                     />
                 </View>
-                <TouchableOpacity style={styles.signUpButton} onPress={() => navigation.navigate("Login")}>
+                <TouchableOpacity style={styles.signUpButton} onPress={() => validateFields(fname, lname, phone, email, password, confirmPassword)}>
                     <Text style={styles.signUpText}>Sign up</Text>
                 </TouchableOpacity>
             </View>
