@@ -1,6 +1,7 @@
 import { StatusBar } from "expo-status-bar";
 import React, { useState, useRef } from "react";
 import { StyleSheet, Text, View, SafeAreaView, Platform, ImageBackground, Image, Button, Pressable, TextInput, TouchableOpacity, Dropdown, Compact, Picker} from 'react-native';
+import { getAuth, signOut } from "firebase/auth";
 
 const Profile = ({ navigation }) => {
     const [fname, setFname] = useState("");
@@ -10,6 +11,16 @@ const Profile = ({ navigation }) => {
     const [role, setRole] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
+
+    const handleSignOut = () => {
+      const auth = getAuth();
+      signOut(auth).then(() => {
+        navigation.navigate("Home");
+      }).catch((error) => {
+      // An error happened.
+        alert(`Error: ${error}`);
+      });
+    }
 
     return (
         <View style={styles.container}>
@@ -66,7 +77,7 @@ const Profile = ({ navigation }) => {
                     />
                 </View>
 
-                <TouchableOpacity style={styles.signOutButton} onPress={() => navigation.navigate("Login")}>
+                <TouchableOpacity style={styles.signOutButton} onPress={() => handleSignOut()}>
                     <Text style={styles.signOutText}>Sign out</Text>
                 </TouchableOpacity>
             </View>
