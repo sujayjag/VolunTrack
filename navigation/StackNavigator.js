@@ -7,6 +7,7 @@ import signUp from "../app/screens/signUp.js";
 import Dashboard from "../app/screens/Dashboard.js";
 import EventForm from "../app/screens/EventForm.js";
 import Profile from "../app/screens/Profile.js";
+import Join from "../app/screens/Join.js";
 import pastEvents from "../app/screens/pastEvents.js";
 import createdEvents from "../app/screens/createdEvents.js";
 import joinedEvents from "../app/screens/joinedEvents.js";
@@ -32,6 +33,7 @@ const MainStackNavigator = () => {
       <Stack.Screen name="Dashboard" component={Dashboard} />
       <Stack.Screen name="EventForm" component={EventForm} options={{ title: 'Event Form' }}/>
       <Stack.Screen name="Profile" component={Profile} />
+      <Stack.Screen name="Join" component={Join} />
       <Stack.Screen name="pastEvents" component={pastEvents} options={{ title: 'Past Events' }}/>
       <Stack.Screen name="createdEvents" component={createdEvents} options={{ title: 'Created Events' }}/>
       <Stack.Screen name="joinedEvents" component={joinedEvents} options={{ title: 'Joined Events' }}/>

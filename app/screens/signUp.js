@@ -4,8 +4,7 @@ import { StyleSheet, Text, View, SafeAreaView, Platform, ImageBackground, Image,
 import { LinearGradient } from 'expo-linear-gradient';
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { doc, setDoc, addDoc, collection, getFirestore } from "firebase/firestore";
-import { initializeApp } from 'firebase/app';
-//import firebaseConfig from '../../db/firebaseConfig.js';
+import { initializeApp, firebase} from 'firebase/app';
 
 const firebaseApp = initializeApp({
   apiKey: "AIzaSyCtSa-qK2xb-Wky_vszWWACyTqru9c9l94",
@@ -54,13 +53,43 @@ const firebaseApp = initializeApp({
           .then((userCredential) => {
         // Signed in 
             
-            const db = getFirestore(firebaseApp)
+            /*const db = getFirestore(firebaseApp)
             addDoc(collection(db, "User"), {
               email: email,
               fName: fname,
               lName: lname,
               phoneNum: phone
-            })
+            })*/
+
+            //const firestore = getFirestore();
+            //const db = getFirestore(firebaseApp)
+            //const db = firebase.firestore()
+            //var userRef = db.collection(firestore, "User").doc();
+            //const query = db.doc(this.props.user.uid).collection('User').orderBy('uploadedOn', 'desc').limit(50)
+            //const userRef = doc(query, "User");
+            //setDoc(userRef, { email: email }, { fName: fname }, { lName: lname }, { phoneNum: phone });
+            //data = {email: email, fName: fname ,  lName: lname ,  phoneNum: phone };
+            //userRef.set(data);
+
+            const firestore = getFirestore();
+            const userRef = doc(firestore, 'User/M2zB52PGYyjHOiA3lfjB');
+            function writeUserRef() {
+                const docData = {
+                    email: email,
+                    fName: fname,
+                    lName: lname,
+                    phoneNum: phone
+                };
+                setDoc(userRef, docData)
+                    .then(() => {
+                        console.log('This value has been written to the database!');
+                    })
+                    .catch((error) => {
+                        console.log(`I got an error! ${error}`);
+                    });
+            }
+            writeUserRef();
+
             const user = userCredential.user;
         
             navigation.navigate("Dashboard");
