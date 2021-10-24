@@ -6,6 +6,11 @@ const Dashboard = ({ navigation }) => {
     return (
         <View style={styles.cont}>
             <StatusBar style="auto"/>
+
+            <View style={styles.logoContainer}>
+                <Text style={styles.titleText}>Welcome</Text>
+            </View>
+
             <TouchableOpacity style={styles.profileIcon2} onPress={() => navigation.navigate("Profile")}>
                 <Image style = {styles.logo} source={require("../assets/user.png")}></Image> 
             </TouchableOpacity>
@@ -30,6 +35,15 @@ const Dashboard = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
+    logoContainer: {
+        position: "absolute", 
+        top: 70,
+        alignItems: 'center',
+    },
+    titleText: {
+        fontSize: 45,
+        fontWeight: "bold",
+    },
     logo: {
         width: 50,
         height: 50,
