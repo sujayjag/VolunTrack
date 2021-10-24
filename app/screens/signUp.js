@@ -24,31 +24,43 @@ const signUp = ({ navigation }) => {
     const [confirmPassword, setConfirmPassword] = useState("");
 
     const validateFields = (fName, lName, phoneNum, email, password, confirmPassword) => {
-      if(!(fName, lName, phoneNum, email, password, confirmPassword)){
-        alert(`Please fill out all fields.`);
+      if(!fName || !lName || !phoneNum || !email || !password || !confirmPassword) {
+        alert(`Please fill out all fields`);
         return;
       }
-      else{
-        alert("Yay it worked")
+      else {
         //more validation logic here
         //this.createUserWithEmailAndPassword(auth, email, password);
+        alert('Valid');
       }
     }
 
+    /*const validateFields = (fName, lName, phoneNum, email, password, confirmPassword) => {
+        if(!(fName, lName, phoneNum, email, password, confirmPassword)){
+          alert(`Please fill out all fields`);
+          return;
+        }
+        else{
+          //more validation logic here
+          //this.createUserWithEmailAndPassword(auth, email, password);
+          alert('Valid')
+        }
+      }*/
+
     //HAVE AUTH FUNCTION HERE, ON SUCCESS, LOG IN AND NAVIGATE TO DASHBOARD
-    // const auth = getAuth();
-    // const createUserWithEmailAndPassword(auth, email, password)
-    //   .then((userCredential) => {
-    //     // Signed in 
-    //     const user = userCredential.user;
-    //     navigation.navigate("Login");
-    //   })
-    //   .catch((error) => {
-    //     const errorCode = error.code;
-    //     const errorMessage = error.message;
-    //     alert(`Error code ${errorCode}, message ${errorMessage}`);
-    //     // ..
-    //   });
+    /*const auth = getAuth();
+    createUserWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        // Signed in 
+        const user = userCredential.user;
+        navigation.navigate("Dashboard");
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        alert(`Error code ${errorCode}, message ${errorMessage}`);
+        // ..
+      });*/
 
     return (
         <View style={styles.container}>
