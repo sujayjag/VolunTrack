@@ -12,7 +12,7 @@ import createdEvents from "../app/screens/createdEvents.js";
 import joinedEvents from "../app/screens/joinedEvents.js";
 import currentEvents from "../app/screens/currentEvents.js";
 import Success from "../app/screens/Success.js";
-import QRCode from "../app/screens/QRCode.js";
+import Join from "../app/screens/Join.js";
 
 const Stack = createStackNavigator();
 
