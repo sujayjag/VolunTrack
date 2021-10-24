@@ -57,7 +57,7 @@ const signUp = ({ navigation }) => {
           .catch((error) => {
             const errorCode = error.code;
             const errorMessage = error.message;
-            alert(`Error code ${errorCode}, message ${errorMessage}`);
+            alert(errorMessage);
           // ..
           });
         }
