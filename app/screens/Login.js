@@ -13,6 +13,7 @@ const Login = ({ navigation }) => {
       let emailRe = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
       if(!(email && password)) {
         alert("Please fill out both fields");
+        return;
       }
       else if(!emailRe.test(String(e).toLowerCase())){
         alert('Please enter a valid email')
