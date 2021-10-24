@@ -7,6 +7,7 @@ import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 const Login = ({ navigation }) => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+
     const handleSignIn = () => {
       const auth = getAuth();
       signInWithEmailAndPassword(auth, email, password)
@@ -22,7 +23,7 @@ const Login = ({ navigation }) => {
           alert(errorMessage);
          });
     }
-
+    
     return (
         <View style={styles.container}>
             <View style={styles.logoContainer}>
@@ -50,11 +51,10 @@ const Login = ({ navigation }) => {
                 />
             </View>
 
-            <TouchableOpacity style={styles.signUpButton} onPress={() => handleSignIn()} >
-                    <LinearGradient>
+            <TouchableOpacity style={styles.signUpButton} onPress={() => handleSignIn()}>
+                    <LinearGradient
                         start={{x: 0, y: 0}} end={{x: 1, y: 0}}
-                        colors={['#FBD786', '#f7797d']} style={styles.signUpButton} 
-                        
+                        colors={['#FBD786', '#f7797d']} style={styles.signUpButton}>
                         <Text style={styles.signUpText}>Login</Text>
                     </LinearGradient>
             </TouchableOpacity>
