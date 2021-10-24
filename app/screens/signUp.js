@@ -62,22 +62,6 @@ const signUp = ({ navigation }) => {
           });
         }
     }
-    
-
-    /*const validateFields = (fName, lName, phoneNum, email, password, confirmPassword) => {
-        if(!(fName, lName, phoneNum, email, password, confirmPassword)){
-          alert(`Please fill out all fields`);
-          return;
-        }
-        else{
-          //more validation logic here
-          //this.createUserWithEmailAndPassword(auth, email, password);
-          alert('Valid')
-        }
-      }*/
-
-    //HAVE AUTH FUNCTION HERE, ON SUCCESS, LOG IN AND NAVIGATE TO DASHBOARD
-    
 
     return (
         <View style={styles.container}>
