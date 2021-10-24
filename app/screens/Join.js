@@ -1,84 +1,104 @@
-import React, { useState, useEffect, Component } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, Dimensions } from 'react-native';
-import { Camera } from 'expo-camera';
-import { BarCodeScanner, Permissions } from 'expo';
+import React, { useState, useEffect } from 'react';
+import { Text, View, StyleSheet, Button, Alert } from 'react-native';
+import { BarCodeScanner } from 'expo-barcode-scanner';
+import { createStackNavigator, createAppContainer } from 'react-navigation';  
 
-const Join = ({ navigation }) => {
+export default function Join() {
   const [hasPermission, setHasPermission] = useState(null);
-  const [data, setData] = useState(null);
-  const [type, setType] = useState(Camera.Constants.Type.back);
+  const [scanned, setScanned] = useState(false);
+  const [text, setText] = useState('Not yet scanned')
+  const [x, setX] = useState(false)
+  const [buttonText, setButtonText] = useState("Successfully Signed In!\nTap to Scan Out.")
+  const [buttonColor, setButtonColor] = useState("green")
 
-
-  useEffect(() => {
+  const askForCameraPermission = () => {
     (async () => {
-      const { status } = await Permissions.askAsync(Permissions.CAMERA);
+      const { status } = await BarCodeScanner.requestPermissionsAsync();
       setHasPermission(status === 'granted');
-    })();
+    })()
+  }
+
+  // Request Camera Permission
+  useEffect(() => {
+    askForCameraPermission();
   }, []);
 
-  // const handleBarCodeScanned = ({ type, data }) => {
-  //   setScanned(true);
-  //   alert(`Bar code with type ${type} and data ${data} has been scanned!`);
-  // };
-
-  _handleBarCodeRead = result => {
-    if (data !== this.state.lastScannedUrl) {
-      LayoutAnimation.spring();
-      setData(result.data);
-      alert(`Bar code with type ${result.type} and data ${result.data} has been scanned!`);
-    }
+  // What happens when we scan the bar code
+  const handleBarCodeScanned = ({ type, data }) => {
+    setScanned(true);
+    setText(data)
+    console.log('Type: ' + type + '\nData: ' + data)
   };
 
+  // Check permissions and return the screens
   if (hasPermission === null) {
-    return <View />;
+    return (
+      <View style={styles.container}>
+        <Text>Requesting for camera permission</Text>
+      </View>)
   }
   if (hasPermission === false) {
-    return <Text>No access to camera</Text>;
+    return (
+      <View style={styles.container}>
+        <Text style={{ margin: 10 }}>No access to camera</Text>
+        <Button title={'Allow Camera'} onPress={() => askForCameraPermission()} />
+      </View>)
   }
+
+  function doChanges() {
+    setButtonColor("red")
+    setButtonText("Successfully Signed Out!\nTap to Scan In to Another Event.");
+  }
+  function reverseChanges() {
+    setButtonColor("green")
+    setButtonText("Successfully Signed In!\nTap to Scan Out of This Event.");
+  }
+
+  function setValues(val) {
+    setScanned(val);
+    if (x === true) {
+      reverseChanges();
+      setX(false);
+    } else if (x === false) {
+      doChanges();
+      setX(true);
+    }
+  }
+
+  // Return the View
   return (
     <View style={styles.container}>
-      <BarCodeScanner onBarCodeRead={this._handleBarCodeRead} style={styles.camera} type={type} barCodeScannerSettings={{barCodeTypes: [BarCodeScanner.Constants.BarCodeType.qr]}}>
-        <View style={styles.buttonContainer}>
-        </View>
-      </BarCodeScanner>
+      <View style={styles.barcodebox}>
+        <BarCodeScanner
+          onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
+          style={{ height: 400, width: 400 }} />
+      </View>
+      <Text style={styles.maintext}>{text}</Text>
+      {scanned && <Button title={buttonText} color={buttonColor} onPress={() => setValues(false)}/>}
+      
+
     </View>
   );
-};
-var device = Dimensions.get('window');
+}
+
 const styles = StyleSheet.create({
-  camera: {
-    // flex: 1,
-    width: 0.8*(device.width),
-    height: 0.8*(device.width)
-  },
   container: {
     flex: 1,
     backgroundColor: '#fff',
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
-  button: {
-    width: 130,
-    borderRadius: 4,
-    backgroundColor: '#14274e',
-    flexDirection: 'row',
-    justifyContent: 'center',
     alignItems: 'center',
-    height: 40
+    justifyContent: 'center',
   },
-  text: {
-    color: '#fff',
-    fontWeight: 'bold',
-    textAlign: 'center'
+  maintext: {
+    fontSize: 16,
+    margin: 20,
+  },
+  barcodebox: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: 300,
+    width: 300,
+    overflow: 'hidden',
+    borderRadius: 30,
+    backgroundColor: 'tomato'
   }
-})
-// const styles = StyleSheet.create({
-//     center: {
-//       flex: 1,
-//       justifyContent: "center",
-//       alignItems: "center",
-//       textAlign: "center",
-//     },
-// });
-
-export default Join;
+});

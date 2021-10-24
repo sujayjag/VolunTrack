@@ -11,7 +11,7 @@ const Dashboard = ({ navigation }) => {
             </TouchableOpacity>
                 
             <TouchableOpacity style={styles.joinButton} onPress={() => navigation.navigate("Join")}>
-                <Text style={styles.joinText}>Join Event</Text>
+                <Text style={styles.joinText}>Join / Leave Event</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.createButton} onPress={() => navigation.navigate("EventForm")}>
                 <Text style={styles.createText}>Create Event</Text>
