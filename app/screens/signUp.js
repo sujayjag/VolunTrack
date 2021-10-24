@@ -4,7 +4,8 @@ import { StyleSheet, Text, View, SafeAreaView, Platform, ImageBackground, Image,
 import { LinearGradient } from 'expo-linear-gradient';
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { doc, setDoc, addDoc, collection, getFirestore } from "firebase/firestore";
-import { initializeApp } from 'firebase/app';
+import { initializeApp, firebase } from 'firebase/app';
+
 //import firebaseConfig from '../../db/firebaseConfig.js';
 
 const firebaseApp = initializeApp({
@@ -16,6 +17,14 @@ const firebaseApp = initializeApp({
   appId: "1:237292785966:web:8813a69013f743a1afaabf",
   measurementId: "G-KN9SKC5DYZ"
 });
+
+  const validateNumber = num => {
+    num = num.replace(/\D/g,'');
+    if (num.length === 10) {
+      return true;
+    }
+    return false;
+  }
 
   const signUp = ({ navigation }) => {
     const [fname, setFname] = useState("");
@@ -33,7 +42,7 @@ const firebaseApp = initializeApp({
         alert(`Please fill out all fields`);
         return;
       }
-      else if(!phoneRe.test(p)){
+      else if(!validateNumber(p)){
         alert('Please enter a valid phone number')
       }
       else if(!emailRe.test(String(e).toLowerCase())){
@@ -54,16 +63,21 @@ const firebaseApp = initializeApp({
           .then((userCredential) => {
         // Signed in 
             
-            const db = getFirestore(firebaseApp)
-            addDoc(collection(db, "User"), {
+            //const db = firebase.firestore();
+            //const newUser = db.collection("User")
+            firebase.firestore().collection('User').add({
               email: email,
               fName: fname,
               lName: lname,
               phoneNum: phone
             })
+              
             const user = userCredential.user;
-        
             navigation.navigate("Dashboard");
+            
+            
+        
+            
           })
           .catch((error) => {
             const errorCode = error.code;
