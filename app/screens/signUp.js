@@ -1,6 +1,19 @@
 import { StatusBar } from "expo-status-bar";
 import React, { useState, useRef } from "react";
 import { StyleSheet, Text, View, SafeAreaView, Platform, ImageBackground, Image, Button, Pressable, TextInput, TouchableOpacity} from 'react-native';
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { initializeApp } from 'firebase/app';
+//import firebaseConfig from '../../db/firebaseConfig.js';
+
+initializeApp({
+  apiKey: "AIzaSyCtSa-qK2xb-Wky_vszWWACyTqru9c9l94",
+  authDomain: "voluntrack-ba589.firebaseapp.com",
+  projectId: "voluntrack-ba589",
+  storageBucket: "voluntrack-ba589.appspot.com",
+  messagingSenderId: "237292785966",
+  appId: "1:237292785966:web:8813a69013f743a1afaabf",
+  measurementId: "G-KN9SKC5DYZ"
+});
 
 const signUp = ({ navigation }) => {
     const [fname, setFname] = useState("");
@@ -9,6 +22,33 @@ const signUp = ({ navigation }) => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
+
+    const validateFields = (fName, lName, phoneNum, email, password, confirmPassword) => {
+      if(!(fName, lName, phoneNum, email, password, confirmPassword)){
+        alert(`Please fill out all fields`);
+        return;
+      }
+      else{
+        //more validation logic here
+        this.createUserWithEmailAndPassword(auth, email, password);
+      }
+    }
+
+    //HAVE AUTH FUNCTION HERE, ON SUCCESS, LOG IN AND NAVIGATE TO DASHBOARD
+    const auth = getAuth();
+    createUserWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        // Signed in 
+        const user = userCredential.user;
+        navigation.navigate("Login");
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        alert(`Error code ${errorCode}, message ${errorMessage}`);
+        // ..
+      });
+
     return (
         <View style={styles.container}>
             <View style={styles.logoContainer}>
@@ -75,7 +115,7 @@ const signUp = ({ navigation }) => {
                     onChangeText={(confirmPassword) => setConfirmPassword(confirmPassword)}
                     />
                 </View>
-                <TouchableOpacity style={styles.signUpButton} onPress={() => navigation.navigate("Login")}>
+                <TouchableOpacity style={styles.signUpButton} onPress={() => this.validateFields(fname, lname, phone, email, password, confirmPassword)}>
                     <Text style={styles.signUpText}>Sign up</Text>
                 </TouchableOpacity>
             </View>
