@@ -2,10 +2,11 @@ import { StatusBar } from "expo-status-bar";
 import React, { useState, useRef } from "react";
 import { StyleSheet, Text, View, SafeAreaView, Platform, ImageBackground, Image, Button, Pressable, TextInput, TouchableOpacity} from 'react-native';
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { doc, setDoc, addDoc, collection, getFirestore } from "firebase/firestore";
 import { initializeApp } from 'firebase/app';
 //import firebaseConfig from '../../db/firebaseConfig.js';
 
-initializeApp({
+const firebaseApp = initializeApp({
   apiKey: "AIzaSyCtSa-qK2xb-Wky_vszWWACyTqru9c9l94",
   authDomain: "voluntrack-ba589.firebaseapp.com",
   projectId: "voluntrack-ba589",
@@ -51,7 +52,16 @@ const signUp = ({ navigation }) => {
         createUserWithEmailAndPassword(auth, email, password)
           .then((userCredential) => {
         // Signed in 
+            
+            const db = getFirestore(firebaseApp)
+            addDoc(collection(db, "User"), {
+              email: email,
+              fName: fname,
+              lName: lname,
+              phoneNum: phone
+            })
             const user = userCredential.user;
+        
             navigation.navigate("Dashboard");
           })
           .catch((error) => {
