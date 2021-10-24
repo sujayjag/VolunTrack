@@ -144,15 +144,10 @@ const firebaseApp = initializeApp({
                 <TouchableOpacity style={styles.signUpButton} onPress={() => validateFields(fname, lname, phone, email, password, confirmPassword)}>
                     <LinearGradient
                         start={{x: 0, y: 0}} end={{x: 1, y: 0}}
-                        colors={['#FBD786', '#f7797d']} style={styles.signUpButton} 
-                        onPress={() => navigation.navigate("Login")}>
+                        colors={['#FBD786', '#f7797d']} style={styles.signUpButton}>
                         <Text style={styles.signUpText}>Sign Up</Text>
                     </LinearGradient>
                 </TouchableOpacity>   
-  
-
-
-
             </View>
         </View>
     );
