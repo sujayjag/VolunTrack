@@ -39,7 +39,7 @@ const MainStackNavigator = () => {
       <Stack.Screen name="currentEvents" component={currentEvents} options={{ title: 'Current Events' }}/>
       <Stack.Screen name="Success" component={Success} />
       <Stack.Screen name="QRCode" component={QRCode} />
-      <Stack.Screen name="Join" component={Join} />
+      <Stack.Screen name="Join" component={QRCode} />
     </Stack.Navigator>
   );
 }
