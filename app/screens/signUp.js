@@ -16,6 +16,14 @@ const firebaseApp = initializeApp({
   measurementId: "G-KN9SKC5DYZ"
 });
 
+  const validateNumber = num => {
+    num = num.replace(/\D/g,'');
+    if (num.length === 10) {
+      return true;
+    }
+    return false;
+  }
+
   const signUp = ({ navigation }) => {
     const [fname, setFname] = useState("");
     const [lname, setLname] = useState("");
@@ -32,7 +40,7 @@ const firebaseApp = initializeApp({
         alert(`Please fill out all fields`);
         return;
       }
-      else if(!phoneRe.test(p)){
+      else if(!validateNumber(p)){
         alert('Please enter a valid phone number')
       }
       else if(!emailRe.test(String(e).toLowerCase())){
@@ -91,8 +99,11 @@ const firebaseApp = initializeApp({
             writeUserRef();
 
             const user = userCredential.user;
-        
             navigation.navigate("Dashboard");
+            
+            
+        
+            
           })
           .catch((error) => {
             const errorCode = error.code;
