@@ -1,18 +1,33 @@
-import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import React, { useState, useEffect, Component } from 'react';
+import { StyleSheet, Text, View, TouchableOpacity, Dimensions } from 'react-native';
 import { Camera } from 'expo-camera';
-import { BarCodeScanner } from 'expo-barcode-scanner';
+import { BarCodeScanner, Permissions } from 'expo';
 
 const Join = ({ navigation }) => {
   const [hasPermission, setHasPermission] = useState(null);
+  const [data, setData] = useState(null);
   const [type, setType] = useState(Camera.Constants.Type.back);
+
 
   useEffect(() => {
     (async () => {
-      const { status } = await Camera.requestCameraPermissionsAsync();
+      const { status } = await Permissions.askAsync(Permissions.CAMERA);
       setHasPermission(status === 'granted');
     })();
   }, []);
+
+  // const handleBarCodeScanned = ({ type, data }) => {
+  //   setScanned(true);
+  //   alert(`Bar code with type ${type} and data ${data} has been scanned!`);
+  // };
+
+  _handleBarCodeRead = result => {
+    if (data !== this.state.lastScannedUrl) {
+      LayoutAnimation.spring();
+      setData(result.data);
+      alert(`Bar code with type ${result.type} and data ${result.data} has been scanned!`);
+    }
+  };
 
   if (hasPermission === null) {
     return <View />;
@@ -22,28 +37,19 @@ const Join = ({ navigation }) => {
   }
   return (
     <View style={styles.container}>
-      <Camera style={styles.camera} type={type} barCodeScannerSettings={{barCodeTypes: [BarCodeScanner.Constants.BarCodeType.qr]}}>
+      <BarCodeScanner onBarCodeRead={this._handleBarCodeRead} style={styles.camera} type={type} barCodeScannerSettings={{barCodeTypes: [BarCodeScanner.Constants.BarCodeType.qr]}}>
         <View style={styles.buttonContainer}>
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => {
-              setType(
-                type === Camera.Constants.Type.back
-                  ? Camera.Constants.Type.front
-                  : Camera.Constants.Type.back
-              );
-            }}>
-            <Text style={styles.text}> Flip </Text>
-          </TouchableOpacity>
         </View>
-      </Camera>
+      </BarCodeScanner>
     </View>
   );
 };
+var device = Dimensions.get('window');
 const styles = StyleSheet.create({
   camera: {
-    flex: 1,
-    width:"100%"
+    // flex: 1,
+    width: 0.8*(device.width),
+    height: 0.8*(device.width)
   },
   container: {
     flex: 1,
