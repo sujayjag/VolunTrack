@@ -23,8 +23,9 @@ const signUp = ({ navigation }) => {
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
 
-    const validateFields = (fName, lName, phoneNum, email, password, confirmPassword) => {
-      if(!fName || !lName || !phoneNum || !email || !password || !confirmPassword) {
+    const validateFields = (f, l, p, e, pass, c) => {
+      //fname, lname, phone, email, password, confirm password, in order.
+      if(!(f && l && p && e && pass && c)) {
         alert(`Please fill out all fields`);
         return;
       }
@@ -128,7 +129,7 @@ const signUp = ({ navigation }) => {
                     onChangeText={(confirmPassword) => setConfirmPassword(confirmPassword)}
                     />
                 </View>
-                <TouchableOpacity style={styles.signUpButton} onPress={() => this.validateFields(fname, lname, phone, email, password, confirmPassword)}>
+                <TouchableOpacity style={styles.signUpButton} onPress={() => validateFields(fname, lname, phone, email, password, confirmPassword)}>
                     <Text style={styles.signUpText}>Sign up</Text>
                 </TouchableOpacity>
             </View>
