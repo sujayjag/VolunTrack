@@ -24,17 +24,45 @@ const signUp = ({ navigation }) => {
     const [confirmPassword, setConfirmPassword] = useState("");
 
     const validateFields = (f, l, p, e, pass, c) => {
+      let phoneRe = /^(?:(?:\+?1\s*(?:[.-]\s*)?)?(?:\(\s*([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9])\s*\)|([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9]))\s*(?:[.-]\s*)?)?([2-9]1[02-9]|[2-9][02-9]1|[2-9][02-9]{2})\s*(?:[.-]\s*)?([0-9]{4})(?:\s*(?:#|x\.?|ext\.?|extension)\s*(\d+))?$/
+      let emailRe = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
       //fname, lname, phone, email, password, confirm password, in order.
       if(!(f && l && p && e && pass && c)) {
         alert(`Please fill out all fields`);
         return;
       }
-      else {
-        //more validation logic here
-        //this.createUserWithEmailAndPassword(auth, email, password);
-        alert('Valid');
+      else if(!phoneRe.test(p)){
+        alert('Please enter a valid phone number')
       }
+      else if(!emailRe.test(String(e).toLowerCase())){
+        alert('Please enter a valid email')
+      }
+      else if(pass !== c) {
+        alert("Please make sure the passwords match")
+      }
+      //more validation logic here
+      
+      
+      else{
+        p = p.replace(/\D+/g, "");
+        setPhone(p);
+
+        const auth = getAuth();
+        createUserWithEmailAndPassword(auth, email, password)
+          .then((userCredential) => {
+        // Signed in 
+            const user = userCredential.user;
+            navigation.navigate("Dashboard");
+          })
+          .catch((error) => {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            alert(`Error code ${errorCode}, message ${errorMessage}`);
+          // ..
+          });
+        }
     }
+    
 
     /*const validateFields = (fName, lName, phoneNum, email, password, confirmPassword) => {
         if(!(fName, lName, phoneNum, email, password, confirmPassword)){
@@ -49,19 +77,7 @@ const signUp = ({ navigation }) => {
       }*/
 
     //HAVE AUTH FUNCTION HERE, ON SUCCESS, LOG IN AND NAVIGATE TO DASHBOARD
-    /*const auth = getAuth();
-    createUserWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        // Signed in 
-        const user = userCredential.user;
-        navigation.navigate("Dashboard");
-      })
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        alert(`Error code ${errorCode}, message ${errorMessage}`);
-        // ..
-      });*/
+    
 
     return (
         <View style={styles.container}>
