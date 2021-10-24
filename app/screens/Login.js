@@ -1,6 +1,7 @@
 import { StatusBar } from "expo-status-bar";
 import React, { useState } from "react";
 import { StyleSheet, Text, View, SafeAreaView, Platform, ImageBackground, Image, Button, Pressable, TextInput, TouchableOpacity} from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 
 const Login = ({ navigation }) => {
@@ -9,6 +10,14 @@ const Login = ({ navigation }) => {
 
     const handleSignIn = () => {
       const auth = getAuth();
+      let emailRe = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+      if(!(email && password)) {
+        alert("Please fill out both fields");
+        return;
+      }
+      else if(!emailRe.test(String(e).toLowerCase())){
+        alert('Please enter a valid email')
+      }
       signInWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
           // Signed in 
@@ -49,14 +58,39 @@ const Login = ({ navigation }) => {
                 onChangeText={(password) => setPassword(password)}
                 />
             </View>
-            <TouchableOpacity style={styles.loginButton} onPress={() => handleSignIn()}>
-                <Text style={styles.loginText}>Login</Text>
+
+            <TouchableOpacity style={styles.signUpButton} onPress={() => handleSignIn()}>
+                    <LinearGradient
+                        start={{x: 0, y: 0}} end={{x: 1, y: 0}}
+                        colors={['#FBD786', '#f7797d']} style={styles.signUpButton}>
+                        <Text style={styles.signUpText}>Login</Text>
+                    </LinearGradient>
             </TouchableOpacity>
+
         </View>
     );
 };
 
 const styles = StyleSheet.create({
+
+    signUpButton: {
+        width: "80%",
+        borderRadius: 25,
+        height: 50,
+        alignItems: "center",
+        justifyContent: "center",
+        marginTop: 40,
+ 
+      },
+    signUpText: {
+        alignItems: 'center',
+        justifyContent: "center",
+        fontSize: 16,
+        lineHeight: 21,
+        fontWeight: 'bold',
+        letterSpacing: 0.25,
+        color: '#f7f5ed',
+    },
     container: {
         flex: 1,
         backgroundColor: "#fff",
@@ -77,11 +111,11 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     inputView: {
-        backgroundColor: "#FFC0CB",
+        backgroundColor: "#edebec",
         borderRadius: 30,
         width: "70%",
         height: 45,
-        marginBottom: 20,
+        marginBottom: 5,
         marginTop: 10,
     },
      
@@ -92,7 +126,7 @@ const styles = StyleSheet.create({
         marginLeft: 20,
     },
     loginButton: {
-        width: "80%",
+        width: "60%",
         borderRadius: 25,
         height: 50,
         alignItems: "center",

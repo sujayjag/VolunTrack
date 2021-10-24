@@ -1,9 +1,11 @@
 import { StatusBar } from "expo-status-bar";
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, Component } from "react";
 import { StyleSheet, Text, View, SafeAreaView, Platform, ImageBackground, Image, Button, Pressable, TextInput, TouchableOpacity} from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { doc, setDoc, addDoc, collection, getFirestore } from "firebase/firestore";
-import { initializeApp } from 'firebase/app';
+import { initializeApp, firebase } from 'firebase/app';
+
 //import firebaseConfig from '../../db/firebaseConfig.js';
 
 const firebaseApp = initializeApp({
@@ -16,7 +18,15 @@ const firebaseApp = initializeApp({
   measurementId: "G-KN9SKC5DYZ"
 });
 
-const signUp = ({ navigation }) => {
+  const validateNumber = num => {
+    num = num.replace(/\D/g,'');
+    if (num.length === 10) {
+      return true;
+    }
+    return false;
+  }
+
+  const signUp = ({ navigation }) => {
     const [fname, setFname] = useState("");
     const [lname, setLname] = useState("");
     const [phone, setPhone] = useState(""); 
@@ -32,7 +42,7 @@ const signUp = ({ navigation }) => {
         alert(`Please fill out all fields`);
         return;
       }
-      else if(!phoneRe.test(p)){
+      else if(!validateNumber(p)){
         alert('Please enter a valid phone number')
       }
       else if(!emailRe.test(String(e).toLowerCase())){
@@ -53,16 +63,21 @@ const signUp = ({ navigation }) => {
           .then((userCredential) => {
         // Signed in 
             
-            const db = getFirestore(firebaseApp)
-            addDoc(collection(db, "User"), {
+            //const db = firebase.firestore();
+            //const newUser = db.collection("User")
+            firebase.firestore().collection('User').add({
               email: email,
               fName: fname,
               lName: lname,
               phoneNum: phone
             })
+              
             const user = userCredential.user;
-        
             navigation.navigate("Dashboard");
+            
+            
+        
+            
           })
           .catch((error) => {
             const errorCode = error.code;
@@ -139,9 +154,14 @@ const signUp = ({ navigation }) => {
                     onChangeText={(confirmPassword) => setConfirmPassword(confirmPassword)}
                     />
                 </View>
+
                 <TouchableOpacity style={styles.signUpButton} onPress={() => validateFields(fname, lname, phone, email, password, confirmPassword)}>
-                    <Text style={styles.signUpText}>Sign up</Text>
-                </TouchableOpacity>
+                    <LinearGradient
+                        start={{x: 0, y: 0}} end={{x: 1, y: 0}}
+                        colors={['#FBD786', '#f7797d']} style={styles.signUpButton}>
+                        <Text style={styles.signUpText}>Sign Up</Text>
+                    </LinearGradient>
+                </TouchableOpacity>   
             </View>
         </View>
     );
@@ -170,11 +190,11 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     inputView: {
-        backgroundColor: "#FFC0CB",
+        backgroundColor: "#edebec",
         borderRadius: 30,
         width: "70%",
         height: 45,
-        marginBottom: 10,
+        marginBottom: 5,
         marginTop: 15,
     },
     TextInput: {
@@ -190,7 +210,7 @@ const styles = StyleSheet.create({
         alignItems: "center",
         justifyContent: "center",
         marginTop: 40,
-        backgroundColor: "#FF1493",
+ 
       },
     signUpText: {
         alignItems: 'center',
@@ -199,7 +219,7 @@ const styles = StyleSheet.create({
         lineHeight: 21,
         fontWeight: 'bold',
         letterSpacing: 0.25,
-        color: 'white',
+        color: '#f7f5ed',
     },
     inputContainer: {
         position: "absolute", 
@@ -207,6 +227,15 @@ const styles = StyleSheet.create({
         width: "90%",
         alignItems: 'center',
     },
+    linearGradient: {
+        width: "80%",
+        borderRadius: 25,
+        height: 50,
+        marginTop: 40,
+        flex: 1,
+        justifyContent: 'center',
+        alignItems:'center',
+      },
 });
 
 export default signUp;
