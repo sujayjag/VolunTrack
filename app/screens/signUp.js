@@ -3,7 +3,7 @@ import React, { useState, useRef, Component } from "react";
 import { StyleSheet, Text, View, SafeAreaView, Platform, ImageBackground, Image, Button, Pressable, TextInput, TouchableOpacity} from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
-import { doc, setDoc, addDoc, collection, getFirestore } from "firebase/firestore";
+import { doc, setDoc, addDoc, collection, getFirestore, onSnapshot } from "firebase/firestore";
 import { initializeApp, firebase} from 'firebase/app';
 
 const firebaseApp = initializeApp({
@@ -96,12 +96,42 @@ const firebaseApp = initializeApp({
                         console.log(`I got an error! ${error}`);
                     });
             }
+
+            const userCollection = collection(firestore, 'User');
+            async function addANewDocument() {
+                const newDoc = await addDoc(userCollection, {
+                    email: email,
+                    fName: fname,
+                    lName: lname,
+                    phoneNum: phone
+                });
+                console.log(`Your doc was created at ${newDoc.path}`);
+            }
+
+            async function readASingleDocument() {
+                const mySnapshot = await getDoc(userRef);
+                if (mySnapshot.exists()) {
+                    const docData = mySnapshot.data();
+                    console.log(`My data is ${JSON.stringify(docData)}`);
+                }
+            }
+
+            function listenToADocument() {
+                onSnapshot(userRef, (docSnapshot) => {
+                    if (docSnapshot.exists()) {
+                        const docData = docSnapshot.data();
+                        console.log(`In realtime, docData is ${JSON.stringify(docData)}`);
+                    }
+                });
+            }
+
             writeUserRef();
+            addANewDocument();
+            readASingleDocument();
+            listenToADocument();
 
             const user = userCredential.user;
             navigation.navigate("Dashboard");
-            
-            
         
             
           })
