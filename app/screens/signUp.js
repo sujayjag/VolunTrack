@@ -1,6 +1,7 @@
 import { StatusBar } from "expo-status-bar";
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, Component } from "react";
 import { StyleSheet, Text, View, SafeAreaView, Platform, ImageBackground, Image, Button, Pressable, TextInput, TouchableOpacity} from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 
 const signUp = ({ navigation }) => {
     const [fname, setFname] = useState("");
@@ -75,9 +76,18 @@ const signUp = ({ navigation }) => {
                     onChangeText={(confirmPassword) => setConfirmPassword(confirmPassword)}
                     />
                 </View>
+
                 <TouchableOpacity style={styles.signUpButton} onPress={() => navigation.navigate("Login")}>
-                    <Text style={styles.signUpText}>Sign up</Text>
+                    <LinearGradient
+                        start={{x: 0, y: 0}} end={{x: 1, y: 0}}
+                        colors={['#FBD786', '#f7797d']} style={styles.signUpButton} 
+                        onPress={() => navigation.navigate("Login")}>
+                        <Text style={styles.signUpText}>Sign Up</Text>
+                    </LinearGradient>
                 </TouchableOpacity>
+
+
+
             </View>
         </View>
     );
@@ -106,11 +116,11 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     inputView: {
-        backgroundColor: "#FFC0CB",
+        backgroundColor: "#edebec",
         borderRadius: 30,
         width: "70%",
         height: 45,
-        marginBottom: 10,
+        marginBottom: 5,
         marginTop: 15,
     },
     TextInput: {
@@ -126,7 +136,7 @@ const styles = StyleSheet.create({
         alignItems: "center",
         justifyContent: "center",
         marginTop: 40,
-        backgroundColor: "#FF1493",
+ 
       },
     signUpText: {
         alignItems: 'center',
@@ -135,7 +145,7 @@ const styles = StyleSheet.create({
         lineHeight: 21,
         fontWeight: 'bold',
         letterSpacing: 0.25,
-        color: 'white',
+        color: '#f7f5ed',
     },
     inputContainer: {
         position: "absolute", 
@@ -143,6 +153,15 @@ const styles = StyleSheet.create({
         width: "90%",
         alignItems: 'center',
     },
+    linearGradient: {
+        width: "80%",
+        borderRadius: 25,
+        height: 50,
+        marginTop: 40,
+        flex: 1,
+        justifyContent: 'center',
+        alignItems:'center',
+      },
 });
 
 export default signUp;

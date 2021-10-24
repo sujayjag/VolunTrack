@@ -1,6 +1,7 @@
 import { StatusBar } from "expo-status-bar";
 import React, { useState } from "react";
 import { StyleSheet, Text, View, SafeAreaView, Platform, ImageBackground, Image, Button, Pressable, TextInput, TouchableOpacity} from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 
 const Login = ({ navigation }) => {
     const [email, setEmail] = useState("");
@@ -31,14 +32,40 @@ const Login = ({ navigation }) => {
                 onChangeText={(password) => setPassword(password)}
                 />
             </View>
-            <TouchableOpacity style={styles.loginButton} onPress={() => navigation.navigate("Dashboard")}>
-                <Text style={styles.loginText}>Login</Text>
+
+            <TouchableOpacity style={styles.signUpButton} onPress={() => navigation.navigate("Dashboard")}>
+                    <LinearGradient
+                        start={{x: 0, y: 0}} end={{x: 1, y: 0}}
+                        colors={['#FBD786', '#f7797d']} style={styles.signUpButton} 
+                        onPress={() => navigation.navigate("Login")}>
+                        <Text style={styles.signUpText}>Login</Text>
+                    </LinearGradient>
             </TouchableOpacity>
+
         </View>
     );
 };
 
 const styles = StyleSheet.create({
+
+    signUpButton: {
+        width: "80%",
+        borderRadius: 25,
+        height: 50,
+        alignItems: "center",
+        justifyContent: "center",
+        marginTop: 40,
+ 
+      },
+    signUpText: {
+        alignItems: 'center',
+        justifyContent: "center",
+        fontSize: 16,
+        lineHeight: 21,
+        fontWeight: 'bold',
+        letterSpacing: 0.25,
+        color: '#f7f5ed',
+    },
     container: {
         flex: 1,
         backgroundColor: "#fff",
@@ -59,11 +86,11 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     inputView: {
-        backgroundColor: "#FFC0CB",
+        backgroundColor: "#edebec",
         borderRadius: 30,
         width: "70%",
         height: 45,
-        marginBottom: 20,
+        marginBottom: 5,
         marginTop: 10,
     },
      
@@ -74,7 +101,7 @@ const styles = StyleSheet.create({
         marginLeft: 20,
     },
     loginButton: {
-        width: "80%",
+        width: "60%",
         borderRadius: 25,
         height: 50,
         alignItems: "center",
